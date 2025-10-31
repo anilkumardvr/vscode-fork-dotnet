@@ -17,21 +17,16 @@ variables:
 steps:
 - task: NuGetToolInstaller@1
 
-- task: NuGetCommand@2
+- task: DotNetCoreCLI@2
   inputs:
-    restoreSolution: '$(solution)'
+    command: 'restore'
+    projects: '**/*.csproj'
 
-- powershell: |
-    Write-Host "Sources: $(Build.SourcesDirectory)"
-    Get-ChildItem -Path "$(Build.SourcesDirectory)" -Recurse -Include *.sln,*.csproj | 
-      Select-Object FullName, Length | Format-Table -AutoSize
-  displayName: "List .sln/.csproj files"
-
-- task: VSBuild@1
+- task: DotNetCoreCLI@2
   inputs:
-    solution: '$(solution)'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration $(BuildConfiguration)'
 
 - task: VSTest@2
   inputs:
