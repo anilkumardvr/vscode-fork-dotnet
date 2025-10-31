@@ -21,6 +21,12 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+- powershell: |
+    Write-Host "Sources: $(Build.SourcesDirectory)"
+    Get-ChildItem -Path "$(Build.SourcesDirectory)" -Recurse -Include *.sln,*.csproj | 
+      Select-Object FullName, Length | Format-Table -AutoSize
+  displayName: "List .sln/.csproj files"
+
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
